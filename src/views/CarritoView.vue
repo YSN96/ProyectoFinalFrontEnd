@@ -15,20 +15,9 @@
                       class="fas fa-long-arrow-alt-left me-2"></i>Vuelve a elegir más Articulos</router-link></h5>
                 <hr>
 
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                  <div>
-                    <p class="mb-1">Shopping cart</p>
-                    <p class="mb-0">You have 4 items in your cart</p>
-                  </div>
-                  <div>
-                    <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!"
-                        class="text-body">price <i class="fas fa-angle-down mt-1"></i></a></p>
-                  </div>
-                </div>
-
                 <div class="card mb-3">
                   <div class="card-body">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between" v-for="articul in pedidos" :key="articul.id_carrito">
                       <div class="d-flex flex-row align-items-center">
                         <div>
                           <img
@@ -47,7 +36,7 @@
                         <div style="width: 80px;">
                           <h5 class="mb-0">$900</h5>
                         </div>
-                        <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                        <a href="#!" style="color: #ff0000;"><i class="fas fa-trash-alt"></i></a>
                       </div>
                     </div>
                   </div>
@@ -92,33 +81,62 @@
   
   <script>
   import Navbar from '@/components/Navbar'
-  import VueJwtDecode from 'vue-jwt-decode'
   
   export default {
     name: 'vistaCarrito',
     components: { Navbar },
     data() {
       return {
-        conceptoId:'',
-        usuario:'',
-
+        pedidos:[],
       };
     },
     methods: {
+      async articulosCarrito(id_concepto){
+        const token = localStorage.getItem('user-token');
+
+        const response = await fetch(`http://127.0.0.1:8000/api/carrito/${id_concepto}`, {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${token}`
+          },
+        });
+        const result = await response.json();
+        console.log(result);
+        this.pedidos = result;
+        console.log('OK')
+      },
+      async articulosUsuario(id_concepto, id_usuario){
+        const token = localStorage.getItem('user-token');
+
+        const response = await fetch(`http://127.0.0.1:8000/api/carrito/${id_concepto}/${id_usuario}`, {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${token}`
+          },
+        });
+        const result = await response.json();
+        console.log(result);
+        this.pedidos = result;
+      }
     },
     mounted() {
-      let user = localStorage.getItem('user-token')
-    if (user) {
-      this.conceptoId = localStorage.getItem('conceptoId');
-      const decodedToken = VueJwtDecode.decode(user);
-      this.usuario = decodedToken.id;
-      console.log(this.usuario);
-      console.log(this.conceptoId);
-    }else{
-      this.$router.push({ name: 'LoginView' });
+      let user = localStorage.getItem('user-token');
+      if (user) {
+        const concepto = localStorage.getItem('conceptoId');
+        const idUsuario = localStorage.getItem('usuarioInvitado');
 
-    }
-    },  
+        console.log(concepto);
+        console.log(idUsuario);
+
+        if (idUsuario === 'NULL' || idUsuario === 'undefined' || idUsuario === '') {
+          this.articulosCarrito(concepto);
+        } else {
+          this.articulosUsuario(concepto, idUsuario);
+        }
+      } else {
+        this.$router.push({ name: 'LoginView' });
+      }
+    }, 
   }
   </script>
   <style>

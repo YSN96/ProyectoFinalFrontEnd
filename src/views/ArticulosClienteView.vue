@@ -50,7 +50,8 @@ export default {
     return {
       selectedQuantities: {},
       conceptoId: '',
-      usuarioInvitado: '',
+      usuarioinvitCon: '',
+      usuarioinvitId:'',
       estadoConcepto: '',
       articulos: [],
       conceptos: [],
@@ -78,7 +79,7 @@ export default {
           cantidad: quantity,
           id_concepto:this.conceptoId,
           id_articulo: articul.id_articulo,
-          id_invitado: articul.id_articulo
+          id_invitado: this.usuarioinvitId
         })
       });
       const result = await response.json();
@@ -130,8 +131,9 @@ export default {
 
         let conceptos = data;
         let tieneIdConcepto = false;
-
-        if ((conceptos.id_usuario === usuario && conceptos.estado == false) || (conceptos.id_concepto == this.usuarioInvitado && conceptos.estado == false) ) {
+        console.log(conceptos.id_concepto);
+        console.log(this.usuarioinvitCon);
+        if ((conceptos.id_usuario === usuario && conceptos.estado == false) || (conceptos.id_concepto === this.usuarioinvitCon && conceptos.estado == false) ) {
           tieneIdConcepto = true;
         }
     
@@ -167,9 +169,8 @@ export default {
         });
         const data = await response.json();
         console.log(data[0]);
-        this.usuarioInvitado = data[0].id_concepto;
-        console.log(data[0].id_concepto);
-        console.log(this.usuarioInvitado);
+        this.usuarioinvitCon = data[0].id_concepto;
+
       } catch (error) {
         console.error(error);
       }
@@ -180,13 +181,16 @@ export default {
     const token = localStorage.getItem('user-token');
     if (token) {
       const idInvitado = localStorage.getItem('usuarioInvitado');
-      console.log(idInvitado);
+      this.usuarioinvitId = idInvitado;
       this.carregarInvitados(idInvitado);
+      
       this.conceptoId = localStorage.getItem('conceptoId');
       this.carregarConceptos(this.conceptoId);
       const decodedToken = VueJwtDecode.decode(token);
       const usuario = decodedToken.id;
       const idUsuarioCena = localStorage.getItem('idUsario');
+      console.log(usuario);
+      console.log(idUsuarioCena);
       if (usuario == idUsuarioCena) {
         const estadoCon = document.getElementById('estadoCo');
         estadoCon.style.display = 'none';

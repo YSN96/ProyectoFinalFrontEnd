@@ -224,9 +224,6 @@ methods: {
     this.$refs.addIdCena.focus();
     
     const token = localStorage.getItem('user-token');
-    const decodedToken = VueJwtDecode.decode(token);
-//    console.log(decodedToken);
-    const id_usario = decodedToken.id;
 
     const response = await fetch(`http://127.0.0.1:8000/api/concepto/${id}`, {
       method: 'GET',
@@ -244,12 +241,9 @@ methods: {
       
       localStorage.setItem('usuarioInvitado', id_userInv);
       localStorage.setItem('conceptoId', this.addIdCena);
-      localStorage.setItem('idUsario', id_usario);  
+      localStorage.setItem('idUsario', result.id_usuario);  
 
-      console.log(localStorage.getItem('usuarioInvitado'));
-      console.log(localStorage.getItem('conceptoId'));
-      console.log(localStorage.getItem('idUsario'));
-//      this.$router.push({ name: 'vistaArticulos' });
+      this.$router.push({ name: 'vistaArticulos' });
     } else {
       this.error2 = true
       return
