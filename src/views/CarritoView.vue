@@ -33,6 +33,24 @@
                         <div style="width: 50px;">
                           <h5 class="fw-normal mb-0">{{ articul.cantidad }} </h5>
                         </div>
+
+                        <div class="d-flex mb-4" style="max-width: 300px">
+                          <button class="btn btn-primary px-3 me-2"
+                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                            <i class="fas fa-minus"></i>
+                          </button>
+
+                          <div class="form-outline">
+                            <label class="form-label" for="cantidad">Cantidad</label>
+                            <input id="cantidad" min="1" name="cantidad" type="number" v-model="articul.cantidad" class="form-control" />
+                          </div>
+
+                          <button class="btn btn-primary px-3 ms-2"
+                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+
                         <div style="width: 80px;">
                           <h5 class="mb-0">{{ articul.precio * articul.cantidad }} €</h5>
                         </div>
@@ -49,11 +67,11 @@
                       <h4 class="mb-2">{{ total }} €</h4>
                     </div>
   
-                    <button type="button" class="btn btn-info btn-block btn-lg">
-                      <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-center">
+                      <button id="pago" type="button" class="btn btn-info btn-block btn-lg">
                         <span>Pagar <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
-                      </div>
-                    </button>
+                      </button>
+                    </div>
   
                   </div>
                 </div>
@@ -71,14 +89,13 @@
   
   <script>
   import Navbar from '@/components/Navbar'
-  
+
   export default {
     name: 'vistaCarrito',
     components: { Navbar },
     data() {
       return {
         pedidos:[],
-        total: 0,
       };
     },
     methods: {
@@ -107,35 +124,38 @@
         const result = await response.json();
         console.log(result);
         this.pedidos = result;
-      }
+      },
+
     },
-    mounted() {
-      let user = localStorage.getItem('user-token');
-      if (user) {
+    computed: {
+      total() {
+        let total = 0;
+        for (let i = 0; i < this.pedidos.length; i++) {
+          total += this.pedidos[i].precio * this.pedidos[i].cantidad;
+        }
+        return total;
+      },
+    },
+    async mounted() {
+      let token = localStorage.getItem('user-token');
+      if (token) {
         const concepto = localStorage.getItem('conceptoId');
         const idUsuario = localStorage.getItem('usuarioInvitado');
-
         console.log(concepto);
         console.log(idUsuario);
-
-        if (idUsuario === 'NULL' || idUsuario === 'undefined' || idUsuario === '') {
+        if (idUsuario === null || idUsuario === 'undefined' || idUsuario === '') {
           this.articulosCarrito(concepto);
+          const btnPago = document.getElementById('pago');
+          btnPago.style.display = 'block';
         } else {
           this.articulosUsuario(concepto, idUsuario);
+          const btnPago = document.getElementById('pago');
+          btnPago.style.display = 'none';
         }
-
-        this.total = 0;
-        for (let i = 0; i < this.pedidos.length; i++) {
-          this.total += this.pedidos.precio * this.pedidos.cantidad;
-        }
-        console.log(this.total);
       } else {
         this.$router.push({ name: 'LoginView' });
       }
     },
-    created() {
-      
-    }, 
   }
   </script>
   <style>

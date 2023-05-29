@@ -577,7 +577,7 @@ computed: {
     },
 
 },
-mounted() {
+async mounted() {
   const user = localStorage.getItem('user-token')
     if (user) {
       const decodedToken = VueJwtDecode.decode(user);

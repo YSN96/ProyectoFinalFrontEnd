@@ -6,6 +6,16 @@
         <div class="d-flex justify-content-around">
           <h1 class="fw-bold text-black"> Id_Cena: <span class="badge badge-secondary">{{ conceptoId }}</span></h1>
           <h1 id="estadoCo" class="fw-bold text-black" > Estado:  <span class="badge badge-secondary">{{ estadoConcepto }}</span></h1>
+          <h1 class="fw-bold text-black"> Carrito:
+              <router-link to="/carrito">
+                <span class="badge badge-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="40" fill="currentColor" class="bi bi-cart4" viewBox="0 2 16 16">
+                  <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                </svg>
+                <i class="fas fa-long-arrow-alt-right ms-2"></i>
+              </span>
+              </router-link>
+          </h1>
         </div>
       </div>
 
@@ -48,10 +58,10 @@ export default {
   components: { Navbar },
   data() {
     return {
-      selectedQuantities: {},
-      conceptoId: '',
       usuarioinvitCon: '',
+      conceptoId: '',
       usuarioinvitId:'',
+      selectedQuantities: {},
       estadoConcepto: '',
       articulos: [],
       conceptos: [],
@@ -111,6 +121,21 @@ export default {
                 console.error(error);
             });
     },
+    async carregarInvitados(id){
+      
+      const token = localStorage.getItem('user-token');
+
+      const response = await fetch(`http://127.0.0.1:8000/api/usuariosinvitados/${id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      console.log(data.id_concepto);
+      return data.id_concepto;
+    },
     async carregarConceptos(id) {
 
       const token = localStorage.getItem('user-token');
@@ -131,8 +156,7 @@ export default {
 
         let conceptos = data;
         let tieneIdConcepto = false;
-        console.log(conceptos.id_concepto);
-        console.log(this.usuarioinvitCon);
+
         if ((conceptos.id_usuario === usuario && conceptos.estado == false) || (conceptos.id_concepto === this.usuarioinvitCon && conceptos.estado == false) ) {
           tieneIdConcepto = true;
         }
@@ -156,41 +180,26 @@ export default {
       } catch (error) {
         console.error(error);
       }
-    },
-    async carregarInvitados(id){
-      
-      const token = localStorage.getItem('user-token');
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/api/usuariosinvitados/${id}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-        });
-        const data = await response.json();
-        console.log(data[0]);
-        this.usuarioinvitCon = data[0].id_concepto;
-
-      } catch (error) {
-        console.error(error);
-      }
     }
 
   },
-  mounted() {
+  async mounted() {
     const token = localStorage.getItem('user-token');
     if (token) {
       const idInvitado = localStorage.getItem('usuarioInvitado');
       this.usuarioinvitId = idInvitado;
-      this.carregarInvitados(idInvitado);
-      
       this.conceptoId = localStorage.getItem('conceptoId');
+      console.log(idInvitado);
+      
+      if (idInvitado !== null || idInvitado !== 'undefined' || idInvitado !== '') {
+        this.usuarioinvitCon = await this.carregarInvitados(idInvitado);
+      }
+
       this.carregarConceptos(this.conceptoId);
       const decodedToken = VueJwtDecode.decode(token);
       const usuario = decodedToken.id;
       const idUsuarioCena = localStorage.getItem('idUsario');
-      console.log(usuario);
-      console.log(idUsuarioCena);
+
       if (usuario == idUsuarioCena) {
         const estadoCon = document.getElementById('estadoCo');
         estadoCon.style.display = 'none';
@@ -198,7 +207,7 @@ export default {
         const estadoCon = document.getElementById('estadoCo');
         estadoCon.style.display = 'block';
       }
-        
+      
     } else {
       this.$router.push({ name: 'LoginView' });
     }

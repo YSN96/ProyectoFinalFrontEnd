@@ -123,7 +123,7 @@ export default {
       });
     }
   },
-  mounted() {
+  async mounted() {
     let user = localStorage.getItem('user-token')
         if (user) {
             this.carregarDatos();

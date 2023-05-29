@@ -14,8 +14,6 @@
             </ol>
             
             <div class="carousel-inner">
-              <!--
-              -->
               <div v-for="(imagen, index) in imagenes" :key="index" class="carousel-item" :class="{ active: index === indiceImagenActual }">
                 <img class="imagen" :alt="imagen.titulo" :src="'http://127.0.0.1:8000/api/images/'+imagen.img"  style="width: 900px; height: 300px;">
                 
@@ -55,7 +53,7 @@
           </div>
         </div>
       </div>
-      <div id="inpIdCena" class="mt-5" style="display: none">  
+      <div id="inpIdCena" style="display: none">  
         <br><br>
         <div class="d-flex justify-content-center">
             <form @submit.prevent="addCena">
@@ -194,7 +192,7 @@ methods: {
 //    console.log(id_usario);
 
     const id_user = await this.carregarConceptos(this.addIdCena);
-    console.log({id_en_addUsuarioInvitado: id_user})
+    //console.log({id_en_addUsuarioInvitado: id_user})
     if (id_user !== id_usario) {      
       const response = await fetch('http://127.0.0.1:8000/api/usuariosinvitados/add', {
         method: 'POST',
@@ -293,8 +291,8 @@ h1 {
   text-align: center;
   font-size: 5em;
   font-weight: bold;
-  padding-top: 5%;
-  padding-bottom: 5%;
+  padding-top: 2%;
+  padding-bottom: 1.5%;
 }
 .arCarousel {
   width: 50%;
