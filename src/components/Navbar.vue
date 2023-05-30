@@ -61,11 +61,12 @@ export default {
     async carregarDatos() {
             const token = localStorage.getItem('user-token');
             const decodedToken = VueJwtDecode.decode(token);
-            console.log(decodedToken);
+            //console.log(decodedToken);
             const usuario = decodedToken.id;
             this.clienteActual =usuario;
 
             const role = decodedToken.role;
+            // si tiene role como admin se va a a la pagina de administrador si no se va al pagina de clientes
             if (role==="ROLE_ADMIN" ) {
               const logoAdmin = document.getElementById('logo-admin');
               logoAdmin.style.display = 'block';

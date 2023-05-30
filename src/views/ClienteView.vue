@@ -207,7 +207,9 @@ methods: {
       });
       const result = await response.json();
       return result.id;
-    }  
+    } else {
+      return null;
+    } 
   },
   async addCena(id){
     this.procesando = true;

@@ -191,7 +191,7 @@ export default {
       this.conceptoId = localStorage.getItem('conceptoId');
       console.log(idInvitado);
       
-      if (idInvitado !== null || idInvitado !== 'undefined' || idInvitado !== '') {
+      if (idInvitado !== 'null' || idInvitado !== 'undefined' || idInvitado !== '') {
         this.usuarioinvitCon = await this.carregarInvitados(idInvitado);
       }
 
