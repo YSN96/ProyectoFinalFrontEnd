@@ -66,7 +66,7 @@ export default {
             this.clienteActual =usuario;
 
             const role = decodedToken.role;
-            // si tiene role como admin se va a a la pagina de administrador si no se va al pagina de clientes
+            // si tiene role como admin se va a la pagina de administrador si no se va al pagina de clientes
             if (role==="ROLE_ADMIN" ) {
               const logoAdmin = document.getElementById('logo-admin');
               logoAdmin.style.display = 'block';

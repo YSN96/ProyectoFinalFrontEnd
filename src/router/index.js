@@ -42,6 +42,16 @@ const routes = [
     name: 'vistaCarrito',
     component: () => import('../views/CarritoView.vue')
   },
+  {
+    path: '/contact',
+    name: 'vistaContacto',
+    component: () => import('../views/ContactView.vue')
+  },
+  {
+    path: '/about',
+    name: 'vistaAbout',
+    component: () => import('../views/AboutView.vue')
+  },
 ]
 
 const router = createRouter({

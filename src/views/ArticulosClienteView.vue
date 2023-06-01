@@ -1,13 +1,14 @@
 <template>
   <body>
     <Navbar/>
-    <div id="artic">
+    <div class="container-fluid">
+      <div id="artic">
       <div class="header mt-5">
         <div class="d-flex justify-content-around">
           <h1 class="fw-bold text-black"> Id_Cena: <span class="badge badge-secondary">{{ conceptoId }}</span></h1>
           <h1 id="estadoCo" class="fw-bold text-black" > Estado:  <span class="badge badge-secondary">{{ estadoConcepto }}</span></h1>
           <h1 class="fw-bold text-black"> Carrito:
-              <router-link to="/carrito">
+            <router-link to="/carrito">
                 <span class="badge badge-secondary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="40" fill="currentColor" class="bi bi-cart4" viewBox="0 2 16 16">
                   <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
@@ -46,6 +47,7 @@
         </div>
       </div>
     </div>
+  </div>
   </body>
 </template>
 
@@ -78,6 +80,12 @@ export default {
       } 
         this.errors[articul.id_articulo] = false;
         console.log('Artículo agregado al carrito con cantidad:', quantity);
+        console.log(this.usuarioinvitId);
+        let idInvi= null;
+        if (this.usuarioinvitId !== 'null' || this.usuarioinvitId !== 'undefined' || this.usuarioinvitId !== '') {
+          idInvi = this.usuarioinvitId;
+        }
+        console.log(idInvi);
        const token = localStorage.getItem('user-token');
       const response = await fetch('http://127.0.0.1:8000/api/carrito/add', {
         method: 'POST',
@@ -89,7 +97,7 @@ export default {
           cantidad: quantity,
           id_concepto:this.conceptoId,
           id_articulo: articul.id_articulo,
-          id_invitado: this.usuarioinvitId
+          id_invitado: idInvi
         })
       });
       const result = await response.json();

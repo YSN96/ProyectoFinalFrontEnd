@@ -69,6 +69,21 @@
 
                       </div>
                     </div>
+
+                    <div class="card mt-3">
+                      <div class="card-body">
+                        <h4><strong>Nos Acceptamos</strong></h4>
+                        <img class="me-2" width="45px"
+                          src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+                          alt="Visa" />
+                        <img class="me-2" width="45px"
+                          src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
+                          alt="Mastercard" />
+                        <img class="me-2" width="45px"
+                          src="../assets/paypal.jpg"
+                          alt="PayPal" />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -257,11 +272,15 @@ export default {
           this.articulosCarrito(concepto);
           const btnPago = document.getElementById('pago');
           btnPago.style.display = 'block';
+          const btnPagoPrueba = document.getElementById('pagoPrueba');
+          btnPagoPrueba.style.display = 'block';
         } else {
           this.carregarConceptos(concepto);
           this.articulosUsuario(concepto, idUsuario);
           const btnPago = document.getElementById('pago');
           btnPago.style.display = 'none';
+          const btnPagoPrueba = document.getElementById('pagoPrueba');
+          btnPagoPrueba.style.display = 'none';
         }
 
       } else {

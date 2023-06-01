@@ -129,7 +129,6 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Raleway:400,700');
 .login__header {
   background: linear-gradient(90deg, #121213, #a4a4a7);
   border-top-left-radius: 1.25em;

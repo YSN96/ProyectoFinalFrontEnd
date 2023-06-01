@@ -1,7 +1,7 @@
 <template>
 
     <Navbar/>
-    <div class="container mt-5">
+    <div class="container-xxl mt-5">
       <div class="title text-center">
           <h1 class="display-5">
             <i class="fas fa-user-alt text-success"></i> <strong>Administracion de Articulos</strong>
