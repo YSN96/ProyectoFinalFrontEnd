@@ -19,7 +19,7 @@ export default {
     data() {
         return {
             label: "COMBOI",
-            apiKey: "AIzaSyCL5HZR0FqdymDvCsNVuiif20VjY2k5GIs",
+            apiKey: "api_key",
             lat: null,
             lng: null,
             admin: [],
